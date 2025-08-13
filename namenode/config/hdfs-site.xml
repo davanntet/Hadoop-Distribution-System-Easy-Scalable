@@ -5,7 +5,7 @@
     </property>
     <property>
         <name>dfs.blocksize</name>
-        <value>6000000</value>
+        <value>67108864</value>
     </property>
     <property>
         <name>dfs.replication</name>
@@ -14,5 +14,9 @@
     <property>
         <name>dfs.namenode.handler.count</name>
         <value>10</value>
+    </property>
+    <property>
+        <name>dfs.datanode.hostname</name>
+        <value>${HOST_IP}</value>
     </property>
 </configuration>

@@ -33,20 +33,20 @@ RUN wget https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/
     mv hadoop-${HADOOP_VERSION} $HADOOP_HOME && \
     rm hadoop-${HADOOP_VERSION}.tar.gz
 
+
 # Create necessary directories
-RUN mkdir -p /tmp/hadoop-logs && \
-    mkdir -p /opt/hadoop/logs && \
-    mkdir -p /opt/hbase/logs && \
-    mkdir -p /data/hadoop/hdfs/namenode && \
+RUN mkdir -p /tmp/hadoop-logs \
+    && mkdir -p /opt/hadoop/logs \
+    && mkdir -p /opt/hbase/logs \
+    && mkdir -p /data/hadoop/hdfs/namenode
 
 # Configure Hadoop
 COPY config/* $HADOOP_CONF_DIR/
 
 # Set permissions
-RUN chmod +x ${HADOOP_HOME}/sbin/* && \
-    chmod +x ${HBASE_HOME}/bin/* && \
-    chmod -R 777 /data/hadoop/hdfs && \
-    chmod -R 777 /data/hadoop/hdfs/namenode
+RUN chmod +x ${HADOOP_HOME}/sbin/* \
+    && chmod -R 777 /data/hadoop/hdfs \
+    && chmod -R 777 /data/hadoop/hdfs/namenode
 
 RUN apt update && \
     apt install sudo -y && \
@@ -55,7 +55,7 @@ RUN apt update && \
 
 RUN rm -f ${HBASE_HOME}/lib/client-facing-thirdparty/log4j-slf4j-impl-2.17.2.jar
 # Expose ports
-EXPOSE 9870 9000 8088 8042 19888 9864
+EXPOSE 9870 9000 8088 8042 19888 9864 8020
 
 # Create startup script
 COPY start-services.sh /start-services.sh
