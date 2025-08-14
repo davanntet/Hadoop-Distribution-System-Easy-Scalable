@@ -1,13 +1,15 @@
 
-version: "1.0.0"
+version: "3.4"
 services:
     namenode:
-        image: namenode:latest
+        image: davann/namenode:1.4.0
         restart: always
         container_name: namenode
-        hostname: namenode
         environment:
-            - HOST_IP=192.168.3.106
+            - HOSTNAME={{.Service.Name}}-{{.Task.Slot}}
+        hostname: "{{.Service.Name}}-{{.Task.Slot}}"
+        # environment:
+        #     - HOST_IP=192.168.3.106
         networks:
             - hadoop-network
         ports:
@@ -21,10 +23,12 @@ services:
                 constraints:
                 - node.role == manager
     datanode:
-        image: datanode:latest
+        image: davann/datanode:1.4.0
         restart: always
         container_name: datanode
-        hostname: datanode
+        environment:
+        - HOSTNAME={{.Service.Name}}-{{.Task.Slot}}
+        hostname: "{{.Service.Name}}-{{.Task.Slot}}"
         networks:
             - hadoop-network
         ports:
@@ -49,4 +53,3 @@ volumes:
 networks:
     hadoop-network:
         driver: overlay
-        name: hadoop-network

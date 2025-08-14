@@ -15,8 +15,8 @@
         <name>dfs.namenode.handler.count</name>
         <value>10</value>
     </property>
-    <property>
+    <!-- <property>
         <name>dfs.datanode.hostname</name>
         <value>${HOST_IP}</value>
-    </property>
+    </property> -->
 </configuration>

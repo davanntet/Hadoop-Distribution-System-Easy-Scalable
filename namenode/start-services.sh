@@ -7,7 +7,7 @@ if [ -z "$HOST_IP" ]; then
 fi
 
 sed -i "s|\${HOST_IP}|$HOST_IP|" $HADOOP_HOME/etc/hadoop/hdfs-site.xml
-sed -i "s|\${HOST_IP}|$HOST_IP|" $HADOOP_HOME/etc/hadoop/core-site.xml
+sed -i "s|\${HOSTNAME}|$HOSTNAME|" $HADOOP_HOME/etc/hadoop/core-site.xml
 # sed -i "s|\${HOST_IP}|$HOST_IP|" $HBASE_HOME/conf/hbase-site.xml
 echo "Using HOST_IP: $HOST_IP"
 
@@ -17,8 +17,8 @@ echo "Using HOST_IP: $HOST_IP"
 ssh-keyscan -H localhost >> ~/.ssh/known_hosts 2>/dev/null
 ssh-keyscan -H 127.0.0.1 >> ~/.ssh/known_hosts 2>/dev/null
 ssh-keyscan -H 0.0.0.0 >> ~/.ssh/known_hosts 2>/dev/null
-# ssh-keyscan -H ${HOSTNAME} >> ~/.ssh/known_hosts 2>/dev/null
-ssh-keyscan -H namenode >> ~/.ssh/known_hosts 2>/dev/null
+ssh-keyscan -H ${HOSTNAME} >> ~/.ssh/known_hosts 2>/dev/null
+# ssh-keyscan -H namenode >> ~/.ssh/known_hosts 2>/dev/null
 # Format namenode if it hasn't been formatted
 if [ ! -d "/data/hadoop/hdfs/namenode/current" ]; then
     echo "Formatting namenode..."
