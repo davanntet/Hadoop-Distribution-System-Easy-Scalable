@@ -2,12 +2,13 @@
 version: "3.4"
 services:
     namenode:
-        image: davann/namenode:1.4.0
-        restart: always
-        container_name: namenode
+        image: davann/namenode:2.0
+        # container_name: namenode
         environment:
-            - HOSTNAME={{.Service.Name}}-{{.Task.Slot}}
-        hostname: "{{.Service.Name}}-{{.Task.Slot}}"
+            - NAMENODE_HOST=namenode
+            - DATANODE_HOST=datanode
+            - HOST_IP=192.168.19.128
+        hostname: namenode
         # environment:
         #     - HOST_IP=192.168.3.106
         networks:
@@ -23,12 +24,13 @@ services:
                 constraints:
                 - node.role == manager
     datanode:
-        image: davann/datanode:1.4.0
-        restart: always
-        container_name: datanode
+        image: davann/datanode:2.0
+        # container_name: datanode
         environment:
-        - HOSTNAME={{.Service.Name}}-{{.Task.Slot}}
-        hostname: "{{.Service.Name}}-{{.Task.Slot}}"
+            - NAMENODE_HOST=namenode
+            - DATANODE_HOST=datanode
+            - HOST_IP=192.168.19.128
+        hostname: datanode
         networks:
             - hadoop-network
         ports:
@@ -41,7 +43,7 @@ services:
             replicas: 2
             placement:
                 constraints:
-                - node.role == worker
+                    - node.role == worker
 volumes:
     namenode-data:
         driver: local

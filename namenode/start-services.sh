@@ -7,8 +7,7 @@ if [ -z "$HOST_IP" ]; then
 fi
 
 sed -i "s|\${HOST_IP}|$HOST_IP|" $HADOOP_HOME/etc/hadoop/hdfs-site.xml
-sed -i "s|\${HOSTNAME}|$HOSTNAME|" $HADOOP_HOME/etc/hadoop/core-site.xml
-# sed -i "s|\${HOST_IP}|$HOST_IP|" $HBASE_HOME/conf/hbase-site.xml
+sed -i "s|\${NAMENODE_HOST}|$NAMENODE_HOST|" $HADOOP_HOME/etc/hadoop/core-site.xml
 echo "Using HOST_IP: $HOST_IP"
 
 # sed -i "s|<name>dfs.datanode.hostname</name>.*|<name>dfs.datanode.hostname</name><value>$HOST_IP</value>|" $HADOOP_HOME/etc/hadoop/hdfs-site.xml
