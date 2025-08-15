@@ -1,12 +1,11 @@
-
 version: "3.4"
 services:
     namenode:
-        image: davann/namenode:2.0
+        image: hbase_namenode:latest
         environment:
             - NAMENODE_HOST=namenode
             - DATANODE_HOST=datanode
-            - HOST_IP=192.168.19.132
+            - HOST_IP=192.168.1.185
         hostname: namenode
         networks:
             - hadoop-network
@@ -15,17 +14,13 @@ services:
             - "9000:9000"   # HDFS client (fs.defaultFS)
         volumes:
             - namenode-data:/data/hadoop/hdfs/namenode
-        deploy:
-            replicas: 1
-            placement:
-                constraints:
-                - node.role == manager
+
     datanode:
-        image: davann/datanode:2.0
+        image: hbase_datanode:latest
         environment:
             - NAMENODE_HOST=namenode
             - DATANODE_HOST=datanode
-            - HOST_IP=192.168.19.132
+            - HOST_IP=192.168.6.218
         hostname: datanode
         networks:
             - hadoop-network
@@ -35,13 +30,9 @@ services:
             - datanode-data:/data/hadoop/hdfs/datanode
         depends_on:
             - namenode
-        deploy:
-            replicas: 2
-            placement:
-                constraints:
-                    - node.role == worker
+
     hmaster:
-        image: davann/hbase:2.0.0
+        image: hbase:latest
         hostname: hmaster
         environment:
             - ROLE=master
@@ -58,14 +49,8 @@ services:
         ports:
           - "16000:16000"   # HBase Master
           - "16010:16010"   # HBase Master Web UI
-        deploy:
-            replicas: 1
-            placement:
-                constraints:
-                    - node.role == worker
-
     hregionserver:
-        image: davann/hbase:2.0.0
+        image: hbase:latest
         hostname: hregionserver
         environment:
             - ROLE=regionserver
@@ -83,13 +68,8 @@ services:
         ports:
           - "16020:16020"   # HBase RegionServer
           - "16030:16030"   # HBase RegionServer Web UI
-        deploy:
-            replicas: 2
-            placement:
-                constraints:
-                    - node.role == worker
     zookeeper:
-        image: davann/zookeeper:2.0.0
+        image: zookeeper:latest
         hostname: zookeeper
         networks:
             - hadoop-network
@@ -99,11 +79,8 @@ services:
           - "2181:2181"   # Zookeeper Client
           - "2888:2888"   # Zookeeper Quorum
           - "3888:3888"   # Zookeeper Leader Election
-        deploy:
-            replicas: 1
-            placement:
-                constraints:
-                    - node.role == worker
+        depends_on:
+            - datanode
 volumes:
     namenode-data:
         driver: local
@@ -112,9 +89,9 @@ volumes:
         driver: local
         name: datanode-data
     hbase_zookeeper:
-        driver: local
         name: hbase_zookeeper
-
+        driver: local
 networks:
     hadoop-network:
-        driver: overlay
+        driver: bridge
+        
